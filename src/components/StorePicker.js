@@ -2,7 +2,7 @@ import React from 'react'
 import { getFunName } from '../helpers'
 
 export default function StorePicker(props) {
-	const myInput = React.createRef();
+	const inputRef = useRef();
 
 	const goToStore = (e) => {
 		e.preventDefault()
@@ -15,7 +15,7 @@ export default function StorePicker(props) {
 	return (
 		<form className="store-selector" onSubmit={goToStore}>
 			<h2>Please Enter A Store</h2>
-			<input ref={myInput} type="text" required placeholder='Store Name' defaultValue={getFunName()} />
+			<input ref={inputRef} type="text" required placeholder='Store Name' defaultValue={getFunName()} />
 			<button type="submit">Visit Store →</button>
 		</form>
 	)

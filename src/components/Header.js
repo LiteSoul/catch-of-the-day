@@ -5,10 +5,10 @@ export default function Header({ tagline }) {
 		<header className="top">
 			<h1>Catch
 				<span className="ofThe">
-					<span className="of">Of</span>
-					<span className="the">The</span>
+					<span className="of">In</span>
+					<span className="the">Da</span>
 				</span>
-				Day</h1>
+				Night</h1>
 			<h3 className="tagline">
 				<span>{tagline}</span>
 			</h3>
