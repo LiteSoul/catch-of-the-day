@@ -9,7 +9,7 @@ export default function AddFishForm({ addFish }) {
 
 	const createFish = (e) => {
 		e.preventDefault()
-		const fishName = `fish${Date.now()}`
+		const fishId = `fish${Date.now()}`
 		const fishBody = {
 			name: nameRef.current.value,
 			price: parseFloat(priceRef.current.value),
@@ -18,9 +18,10 @@ export default function AddFishForm({ addFish }) {
 			image: imageRef.current.value,
 		}
 		let fullFish = {}
-		fullFish[fishName] = fishBody
+		fullFish[fishId] = fishBody
 		addFish(fullFish)
-		console.log(fullFish)
+		//clear form
+		e.currentTarget.reset()
 	}
 
 	return (
