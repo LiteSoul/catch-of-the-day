@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Header() {
+export default function Header({ tagline }) {
 	return (
 		<header className="top">
 			<h1>Catch
@@ -10,7 +10,7 @@ export default function Header() {
 				</span>
 				Day</h1>
 			<h3 className="tagline">
-				<span>Fresh Daily</span>
+				<span>{tagline}</span>
 			</h3>
 		</header>
 	)

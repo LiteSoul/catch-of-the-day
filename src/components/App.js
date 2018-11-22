@@ -7,7 +7,7 @@ export default function App() {
 	return (
 		<div className="catch-of-the-day">
 			<div className="menu">
-				<Header></Header>
+				<Header tagline='Fresh Seafood Market'></Header>
 			</div>
 			<Order></Order>
 			<Inventory></Inventory>
