@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function AddFishForm() {
+export default function AddFishForm({ addFish }) {
 	const nameRef = React.createRef()
 	const priceRef = React.createRef()
 	const statusRef = React.createRef()
@@ -9,9 +9,18 @@ export default function AddFishForm() {
 
 	const createFish = (e) => {
 		e.preventDefault()
-		console.log('making a fish')
-
-
+		const fishName = `fish${Date.now()}`
+		const fishBody = {
+			name: nameRef.current.value,
+			price: parseFloat(priceRef.current.value),
+			status: statusRef.current.value,
+			desc: descRef.current.value,
+			image: imageRef.current.value,
+		}
+		let fullFish = {}
+		fullFish[fishName] = fishBody
+		addFish(fullFish)
+		console.log(fullFish)
 	}
 
 	return (
