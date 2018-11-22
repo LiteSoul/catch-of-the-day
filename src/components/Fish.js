@@ -2,6 +2,8 @@ import React from 'react'
 import { formatPrice } from '../helpers'
 
 export default function Fish({ fish }) {
+	const isAvailable = fish.status === 'available'
+
 	return (
 		<>
 			<li className="menu-fish">
@@ -10,7 +12,10 @@ export default function Fish({ fish }) {
 					<span className='price'>{formatPrice(fish.price)}</span>
 				</h3>
 				<p>{fish.desc}</p>
-				<button>Add To Cart</button>
+				<button disabled={!isAvailable}>{isAvailable
+					? 'Add To Order'
+					: 'Sold Out!'
+				}</button>
 			</li>
 		</>
 	)
