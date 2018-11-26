@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { getFunName } from '../helpers'
 
 export default function StorePicker(props) {
@@ -7,7 +7,7 @@ export default function StorePicker(props) {
 	const goToStore = (e) => {
 		e.preventDefault()
 		//grab store name
-		const storeName = myInput.current.value
+		const storeName = inputRef.current.value
 		//go to store/storename
 		props.history.push(`/store/${storeName}`)
 	}
