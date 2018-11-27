@@ -4,11 +4,12 @@
   "private": true,
   "dependencies": {
     "autoprefixer-stylus": "^0.14.0",
-    "firebase": "4.6.2",
+    "firebase": "5.5.9",
     "prop-types": "^15.6.2",
     "re-base": "^4.0.0",
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2",
+    "react-firebase-hooks": "^0.4.0",
     "react-router-dom": "^4.4.0-beta.6",
     "react-scripts": "2.1.1",
     "react-transition-group": "^2.5.0",

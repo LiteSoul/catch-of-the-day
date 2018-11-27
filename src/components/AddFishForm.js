@@ -19,7 +19,8 @@ export default function AddFishForm({ addFish }) {
 		}
 		let fullFish = {}
 		fullFish[fishId] = fishBody
-		addFish(fullFish)
+		// addFish(fullFish)
+		addFish(fishBody)
 		//clear form
 		e.currentTarget.reset()
 	}
