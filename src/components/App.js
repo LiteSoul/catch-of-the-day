@@ -42,17 +42,25 @@ export default function App(props) {
 	}, [])
 
 	const addFish = (fish) => {
-		setFish({ ...fish, ...fishes })
+		const newFishKey = firebase.database().ref().child(`${props.match.params.storeId}/fishes`).push().key;
+		let updateFish = {};
+		// updateFish[`${props.match.params.storeId}/fishes/${newFishKey}`] = fish;
+		updateFish[newFishKey] = fish;
+		// firebase.database().ref().update(updateFish);
+		firebase.database().ref(`${props.match.params.storeId}/fishes/`).update(updateFish);
+		setFish({ ...updateFish, ...fishes })
 		console.log('fish added!!!')
 		console.log(fishes)
-		const itemsRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
-		itemsRef.push(fish)
+
+		// const itemsRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
+		// itemsRef.push(fish)
 	}
 
 	const loadSampleFishes = () => {
-		setFish({ ...fishes, ...sampleFishesBody })
-		const itemsRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
-		sampleFishesBody.map((fish) => itemsRef.push(fish))
+		// setFish({ ...fishes, ...sampleFishesBody })
+		// sampleFishesBody.map(fish => setFish({ ...fishes, fish }))
+		// const itemsRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
+		sampleFishesBody.map(fish => addFish(fish))
 	}
 
 	const addToOrder = (key) => {
