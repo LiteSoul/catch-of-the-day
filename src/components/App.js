@@ -18,10 +18,8 @@ export default function App(props) {
 		// itemsRef.push(fishes)
 
 		itemsRef.on('value', (snapshot) => {
-			// console.log(snapshot.val());
-			let fishes = snapshot.val();
-			console.log(fishes)
-		});
+			console.log(snapshot.val())
+		})
 		return () => {
 			itemsRef.off()
 		}
@@ -48,8 +46,10 @@ export default function App(props) {
 		updateFish[newFishKey] = fish;
 		// firebase.database().ref().update(updateFish);
 		firebase.database().ref(`${props.match.params.storeId}/fishes/`).update(updateFish);
-		setFish({ ...updateFish, ...fishes })
-		console.log('fish added!!!')
+		// setFish({ ...updateFish, ...fishes })
+		setFish({ ...fishes, ...updateFish })
+		// console.log('updateFish object:')
+		// console.log(updateFish)
 		console.log(fishes)
 
 		// const itemsRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
@@ -57,10 +57,17 @@ export default function App(props) {
 	}
 
 	const loadSampleFishes = () => {
-		// setFish({ ...fishes, ...sampleFishesBody })
-		// sampleFishesBody.map(fish => setFish({ ...fishes, fish }))
-		// const itemsRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
-		sampleFishesBody.map(fish => addFish(fish))
+		// sampleFishesBody.map(fish => addFish(fish))
+		const properSamples = sampleFishesBody.map(fish => {
+			const newFishKey = firebase.database().ref().child(`${props.match.params.storeId}/fishes`).push().key;
+			let updateFish = {};
+			updateFish[newFishKey] = fish;
+			firebase.database().ref(`${props.match.params.storeId}/fishes/`).update(updateFish);
+			return updateFish
+		})
+
+		setFish({ ...fishes, ...properSamples })
+		console.log(fishes)
 	}
 
 	const addToOrder = (key) => {
