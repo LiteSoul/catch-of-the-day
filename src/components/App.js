@@ -13,61 +13,30 @@ export default function App(props) {
 	const [order, setOrder] = useState({})
 
 	useEffect(() => {
-
-		const itemsRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
-		// itemsRef.push(fishes)
-
-		itemsRef.on('value', (snapshot) => {
+		//Take a snapshot of the DB
+		const fishesRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
+		fishesRef.on('value', (snapshot) => {
+			console.log('Snapshot of the database:')
 			console.log(snapshot.val())
 		})
 		return () => {
-			itemsRef.off()
+			//Stop the listener
+			fishesRef.off()
 		}
-
-		//these props are coming from router
-		//this.ref from rebase not accesible, so this workaround:
-		// const ref = base.syncState(`${props.match.params.storeId}/fishes`, {
-		// 	context: {
-		// 		setState: ({ fishes }) => setFish({ ...fishes }),
-		// 		state: { fishes },
-		// 	},
-		// 	state: 'fishes'
-		// })
-
-		// 	return () => {
-		// 		base.removeBinding(ref);
-		// 	}
 	}, [])
 
 	const addFish = (fish) => {
 		const newFishKey = firebase.database().ref().child(`${props.match.params.storeId}/fishes`).push().key;
-		let updateFish = {};
-		// updateFish[`${props.match.params.storeId}/fishes/${newFishKey}`] = fish;
-		updateFish[newFishKey] = fish;
-		// firebase.database().ref().update(updateFish);
-		firebase.database().ref(`${props.match.params.storeId}/fishes/`).update(updateFish);
-		// setFish({ ...updateFish, ...fishes })
-		setFish({ ...fishes, ...updateFish })
-		// console.log('updateFish object:')
-		// console.log(updateFish)
+		let fishObject = {};
+		fishObject[newFishKey] = fish;
+		firebase.database().ref(`${props.match.params.storeId}/fishes/`).update(fishObject);
+		setFish(prevState => { return { ...fishObject, ...prevState } })
+		console.log('fishes state from addFish (missing latest):')
 		console.log(fishes)
-
-		// const itemsRef = firebase.database().ref(`${props.match.params.storeId}/fishes`)
-		// itemsRef.push(fish)
 	}
 
 	const loadSampleFishes = () => {
-		// sampleFishesBody.map(fish => addFish(fish))
-		const properSamples = sampleFishesBody.map(fish => {
-			const newFishKey = firebase.database().ref().child(`${props.match.params.storeId}/fishes`).push().key;
-			let updateFish = {};
-			updateFish[newFishKey] = fish;
-			firebase.database().ref(`${props.match.params.storeId}/fishes/`).update(updateFish);
-			return updateFish
-		})
-
-		setFish({ ...fishes, ...properSamples })
-		console.log(fishes)
+		sampleFishesBody.map(fish => addFish(fish))
 	}
 
 	const addToOrder = (key) => {
