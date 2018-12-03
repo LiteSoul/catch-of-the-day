@@ -30,8 +30,15 @@ export default function Order({ fishes, order,removeFromOrder }) {
 		return (
 			<CSSTransition classNames='order' key={key} timeout={{enter:250,exit:250}}>
 				<li key={key}>
-					{count} lbs {fish.name} {formatPrice(count * fish.price)}
-					<button onClick={()=>removeFromOrder(key)}>&times;</button>
+					<span>
+						<TransitionGroup>
+							<CSSTransition>
+								<span>{count}</span>
+							</CSSTransition>
+						</TransitionGroup>
+						 lbs {fish.name} {formatPrice(count * fish.price)}
+						<button onClick={()=>removeFromOrder(key)}>&times;</button>
+					</span>
 				</li>
 			</CSSTransition>
 		)
