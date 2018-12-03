@@ -66,18 +66,32 @@ export default function App({
     //set that to state
   };
 
+const deleteFish = key => {
+  fishesRef.child(key).remove()
+  console.log(key)
+}
+
   const addToOrder = key => {
     //copy original order so we can add/update/modify data
     const newOrder = { ...order };
     //add a fishID to order, along with quantity
     newOrder[key] = newOrder[key] + 1 || 1;
     //set it
-    setOrder(newOrder);
-    console.log(order);
+    setOrder(newOrder)
+  };
+
+  const removeFromOrder = key => {
+    //copy original order so we can add/update/modify data
+    const newOrder = { ...order };
+    //add a fishID to order, along with quantity
+    delete newOrder[key]
+    //set it to state
+    setOrder(newOrder)
   };
 
   useEffect(
     () => {
+      //when order state changes (adding or removing items), it updates localStorage, so it persists on refresh
       localStorage.setItem(storeId, JSON.stringify(order));
     },
     [order]
@@ -99,10 +113,11 @@ export default function App({
             ))}
         </ul>
       </div>
-      <Order fishes={fishes} order={order} />
+      <Order fishes={fishes} order={order} removeFromOrder={removeFromOrder} />
       <Inventory
         addFish={addFish}
         updateFish={updateFish}
+        deleteFish={deleteFish}
         loadSampleFishes={loadSampleFishes}
         fishes={fishes}
       />

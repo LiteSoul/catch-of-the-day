@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function EditFishForm({ fish, fishId,updateFish }) {
+export default function EditFishForm({ fish, fishId,updateFish,deleteFish }) {
   const handleChange = e => {
     console.log(e.currentTarget.value);
     //update that fish
@@ -38,6 +38,7 @@ export default function EditFishForm({ fish, fishId,updateFish }) {
         value={fish.image}
         onChange={handleChange}
       />
+      <button onClick={()=>deleteFish(fishId)}>Delete Fish</button>
     </div>
   );
 }

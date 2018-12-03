@@ -1,7 +1,8 @@
 import React from 'react'
 import { formatPrice } from '../helpers'
+import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
-export default function Order({ fishes, order }) {
+export default function Order({ fishes, order,removeFromOrder }) {
 	const orderIds = Object.keys(order)
 	const total = orderIds.reduce((prevTotal, key) => {
 		const fish = fishes[key]
@@ -18,24 +19,34 @@ export default function Order({ fishes, order }) {
 		//make sure the fish is loaded from DB first
 		if (!fish) return null
 		if (!isAvailable) {
-			return <li key={key}>
-				Sorry {fish ? fish.name : 'fish'} is no longer available
-			</li>
+			return (
+				<CSSTransition classNames='order' key={key} timeout={{enter:250,exit:250}}>
+					<li key={key}>
+						Sorry {fish ? fish.name : 'fish'} is no longer available
+					</li>
+				</CSSTransition>
+			)
 		}
-		return <li key={key}>
-			{count} lbs {fish.name} {formatPrice(count * fish.price)}
-		</li>
+		return (
+			<CSSTransition classNames='order' key={key} timeout={{enter:250,exit:250}}>
+				<li key={key}>
+					{count} lbs {fish.name} {formatPrice(count * fish.price)}
+					<button onClick={()=>removeFromOrder(key)}>&times;</button>
+				</li>
+			</CSSTransition>
+		)
+
 	}
 
 	return (
 		<div className="order-wrap">
 			<h2>Order</h2>
-			<ul className='order'>
+			<TransitionGroup component='ul' className='order'>
 				{orderIds.map(renderOrder)}
 				<div className="total">
 					Total: <strong>{formatPrice(total)}</strong>
 				</div>
-			</ul>
+			</TransitionGroup>
 		</div>
 	)
 }
