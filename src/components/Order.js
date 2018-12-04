@@ -1,59 +1,76 @@
-import React from 'react'
-import { formatPrice } from '../helpers'
-import {TransitionGroup, CSSTransition} from 'react-transition-group'
+import React from "react";
+import PropTypes from "prop-types";
+import { formatPrice } from "../helpers";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-export default function Order({ fishes, order,removeFromOrder }) {
-	const orderIds = Object.keys(order)
+Order.propTypes = {
+	fishes: PropTypes.object,
+	order: PropTypes.object,
+	removeFromOrder: PropTypes.func
+};
+
+export default function Order({ fishes, order, removeFromOrder }) {
+	const orderIds = Object.keys(order);
 	const total = orderIds.reduce((prevTotal, key) => {
-		const fish = fishes[key]
-		const count = order[key]
-		const isAvailable = fish && fish.status === 'available'
-		if (isAvailable) { return prevTotal + (count * fish.price) }
-		return prevTotal
-	}, 0)
+		const fish = fishes[key];
+		const count = order[key];
+		const isAvailable = fish && fish.status === "available";
+		if (isAvailable) {
+			return prevTotal + count * fish.price;
+		}
+		return prevTotal;
+	}, 0);
 
-	const renderOrder = (key) => {
-		const fish = fishes[key]
-		const count = order[key]
-		const isAvailable = fish && fish.status === 'available'
+	const renderOrder = key => {
+		const fish = fishes[key];
+		const count = order[key];
+		const isAvailable = fish && fish.status === "available";
+		const transitionOptions = {
+			classNames: "order",
+			key,
+			timeout: { enter: 500, exit: 500 }
+		};
 		//make sure the fish is loaded from DB first
-		if (!fish) return null
+		if (!fish) return null;
 		if (!isAvailable) {
 			return (
-				<CSSTransition classNames='order' key={key} timeout={{enter:250,exit:250}}>
+				<CSSTransition {...transitionOptions}>
 					<li key={key}>
-						Sorry {fish ? fish.name : 'fish'} is no longer available
+						Sorry {fish ? fish.name : "fish"} is no longer available
 					</li>
 				</CSSTransition>
-			)
+			);
 		}
 		return (
-			<CSSTransition classNames='order' key={key} timeout={{enter:250,exit:250}}>
+			<CSSTransition {...transitionOptions}>
 				<li key={key}>
 					<span>
-						<TransitionGroup>
-							<CSSTransition>
+						<TransitionGroup component="span" className="count">
+							<CSSTransition
+								classNames="count"
+								key={count}
+								timeout={{ enter: 1000, exit: 1000 }}
+							>
 								<span>{count}</span>
 							</CSSTransition>
 						</TransitionGroup>
-						 lbs {fish.name} {formatPrice(count * fish.price)}
-						<button onClick={()=>removeFromOrder(key)}>&times;</button>
+						lbs {fish.name} {formatPrice(count * fish.price)}
+						<button onClick={() => removeFromOrder(key)}>&times;</button>
 					</span>
 				</li>
 			</CSSTransition>
-		)
-
-	}
+		);
+	};
 
 	return (
 		<div className="order-wrap">
 			<h2>Order</h2>
-			<TransitionGroup component='ul' className='order'>
+			<TransitionGroup component="ul" className="order">
 				{orderIds.map(renderOrder)}
 				<div className="total">
 					Total: <strong>{formatPrice(total)}</strong>
 				</div>
 			</TransitionGroup>
 		</div>
-	)
+	);
 }

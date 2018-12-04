@@ -1,6 +1,15 @@
 import React from 'react'
+import PropTypes from "prop-types"
 import AddFishForm from './AddFishForm'
 import EditFishForm from './EditFishForm'
+
+Inventory.propTypes = {
+	addFish: PropTypes.func,
+	updateFish: PropTypes.func,
+	deleteFish: PropTypes.func,
+	loadSampleFishes: PropTypes.func,
+	fishes: PropTypes.object
+}
 
 export default function Inventory({ addFish, updateFish, deleteFish, loadSampleFishes, fishes }) {
 	return (
