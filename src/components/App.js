@@ -76,6 +76,8 @@ export default function App({
 	const deleteFish = key => {
 		fishesRef.child(key).remove();
 		console.log(key);
+		//also removes that fish from the order
+		removeFromOrder(key)
 	};
 
 	const addToOrder = key => {
