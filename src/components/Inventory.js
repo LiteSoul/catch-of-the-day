@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import firebase from "firebase";
 import { firebaseApp } from "../firebase";
@@ -37,6 +37,7 @@ export default function Inventory({
 			.then(authHandler);
 	};
 
+	//auth and check store owner
 	const authHandler = async authData => {
 		console.log(authData);
 		const userId = authData.user.uid;
@@ -64,41 +65,62 @@ export default function Inventory({
 	//logout method
 	const logout = async () => {
 		console.log("loggin out");
+		await firebase.auth().signOut()
+		setUser(null)
 	};
+
+	//maintain user logged in on page refresh
+	useEffect(() => {
+		firebase.auth().onAuthStateChanged(user => {
+			if (user) authHandler({ user })
+		})
+	}, []);
 
 	//logout button
 	const logoutButton = <button onClick={logout}>Log Out</button>;
 
+
 	//if there is no user currently loggedin, only show Login
 	if (!user) return <Login authenticate={authenticate} />;
+
 	//check if the user is the owner
-	if (user !== owner)
+	if (owner && user !== owner)
 		return (
-			<>
+			<div className="inventory">
 				{logoutButton}
 				<h3>
 					Sorry, you are not the owner of this store... go to the homepage to
 					create a new store just for you!
 				</h3>
-			</>
+			</div>
 		);
-	//otherwise (owner loggedin has access to full inventory)
+
+
+
+	//otherwise (loggedin owner has access to full inventory)
+	if (owner === user)
+		return (
+			<div className="inventory">
+				<h2>Inventory</h2>
+				{logoutButton}
+				{fishes &&
+					Object.entries(fishes).map(([key, fish]) => (
+						<EditFishForm
+							key={key}
+							fishId={key}
+							fish={fish}
+							updateFish={updateFish}
+							deleteFish={deleteFish}
+						/>
+					))}
+				<AddFishForm addFish={addFish} />
+				<button onClick={loadSampleFishes}>Load Sample Fishes</button>
+			</div>
+		);
+
+
 	return (
-		<div className="inventory">
-			<h2>Inventory</h2>
-			{logoutButton}
-			{fishes &&
-				Object.entries(fishes).map(([key, fish]) => (
-					<EditFishForm
-						key={key}
-						fishId={key}
-						fish={fish}
-						updateFish={updateFish}
-						deleteFish={deleteFish}
-					/>
-				))}
-			<AddFishForm addFish={addFish} />
-			<button onClick={loadSampleFishes}>Load Sample Fishes</button>
-		</div>
-	);
+		<div>loading...</div>
+	)
+
 }
