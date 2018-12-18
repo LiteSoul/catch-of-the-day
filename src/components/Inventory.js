@@ -98,7 +98,7 @@ export default function Inventory({
 
 
 	//otherwise (loggedin owner has access to full inventory)
-	if (owner === user)
+	if (owner && user && owner === user)
 		return (
 			<div className="inventory">
 				<h2>Inventory</h2>
